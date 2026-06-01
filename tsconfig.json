@@ -1,44 +1,13 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
-
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
-
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
-  }
+    "target": "es2022",                          /* Versão do JavaScript final */
+    "module": "commonjs",                        /* Sistema de módulos padrão do Node */
+    "rootDir": "./src",                          /* Onde estará nosso código TypeScript */
+    "outDir": "./dist",                          /* Onde o código compilado será salvo */
+    "esModuleInterop": true,                      /* Permite importações amigáveis */
+    "forceConsistentCasingInFileNames": true,            /* Garante consistência em nomes de arquivos */
+    "strict": true,                              /* Ativa validações estritas de tipo (essencial!) */
+    "skipLibCheck": true                         /* Pula verificação de tipos das bibliotecas externas */
+  },
+  "include": ["src/**/*"]                        /* Diz ao TS para olhar apenas a pasta src */
 }
