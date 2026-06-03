@@ -1,6 +1,6 @@
 import express from "express";
 
-import especialtiesRouter from "./routes/especialties.routes";
+import specialtiesRouter from "./routes/especialties.routes";
 import doctorsRouter from "./routes/doctors.routes";
 import appointmentsRouter from "./routes/appointments.routes";
 
@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 //Vinculação das rotas
-app.use('/specialities', especialtiesRouter);
+app.use('/specialities', specialtiesRouter);
 app.use('/doctors', doctorsRouter);
 app.use('/appointments', appointmentsRouter);
 

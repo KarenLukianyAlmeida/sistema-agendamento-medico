@@ -1,10 +1,11 @@
 import { Router } from "express";
+import { SpecialityController } from '../controllers/speciality.controller';
 
-const especialtiesRouter = Router();
+const specialtiesRouter = Router();
+const specialityController = new SpecialityController();
 
 //Listar especialidades
-especialtiesRouter.get('/', (req, res) => {
-    res.json({message: 'Listagem de especialidades médica'});
-});
+specialtiesRouter.get('/', specialityController.listAll);
+specialtiesRouter.post('/', specialityController.create);
 
-export default especialtiesRouter;
+export default specialtiesRouter;

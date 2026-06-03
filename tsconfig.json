@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2022",                          /* Versão do JavaScript final */
-    "module": "commonjs",                        /* Sistema de módulos padrão do Node */
-    "rootDir": "./src",                          /* Onde estará nosso código TypeScript */
-    "outDir": "./dist",                          /* Onde o código compilado será salvo */
-    "esModuleInterop": true,                      /* Permite importações amigáveis */
-    "forceConsistentCasingInFileNames": true,            /* Garante consistência em nomes de arquivos */
-    "strict": true,                              /* Ativa validações estritas de tipo (essencial!) */
-    "skipLibCheck": true                         /* Pula verificação de tipos das bibliotecas externas */
+    "target": "es2022",
+    "types": ["node"],
+    "module": "commonjs",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*"]                        /* Diz ao TS para olhar apenas a pasta src */
+  "include": ["src/**/*", "src/prisma.ts"]
 }
