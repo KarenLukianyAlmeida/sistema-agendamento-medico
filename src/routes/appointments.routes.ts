@@ -1,20 +1,14 @@
 import { Router } from "express";
+import { AppointmentController } from "../controllers/appointment.contoller";
 
 const appointmentsRouter = Router();
+const appointmentController = new AppointmentController();
 
-//Lista consultas (filtros por médico, paciente, data)
-appointmentsRouter.get('/', (req, res) => {
-    res.json({message: 'Listagem das consultas'});
-});
-
-//Agenda uma consulta num slot disponível
-appointmentsRouter.post('/', (req, res) => {
-    res.status(201).json({message: 'Consulta agendada com sucesso'});
-})
-
-//Cancela consulta (com política de cancelamento)
-appointmentsRouter.patch('/:id/cancel', (req, res) => {
-    res.status(200).json({message: 'Consulta cancelada com sucesso'});
-});
+appointmentsRouter.post("/", appointmentController.create);
+appointmentsRouter.get("/", appointmentController.listAll);
+// Cancelar uma consulta (Usamos PATCH porque estamos a fazer uma alteração parcial do status)
+appointmentsRouter.patch("/:id/cancel", appointmentController.cancel);
+appointmentsRouter.get("/patient/:patientId", appointmentController.listByPatient);
+appointmentsRouter.get("/doctor/:doctorId", appointmentController.listByDoctor);
 
 export default appointmentsRouter;

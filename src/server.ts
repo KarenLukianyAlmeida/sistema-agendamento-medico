@@ -1,8 +1,10 @@
 import express from "express";
 
 import specialtiesRouter from "./routes/especialties.routes";
+import usersRouter from "./routes/users.routes";
 import doctorsRouter from "./routes/doctors.routes";
 import appointmentsRouter from "./routes/appointments.routes";
+import availabilitiesRouter from "./routes/availabilities.routes";
 
 const app = express();
 const PORT = 3000;
@@ -15,8 +17,10 @@ app.get('/', (req, res) => {
 });
 
 //Vinculação das rotas
-app.use('/specialities', specialtiesRouter);
+app.use('/specialities', specialtiesRouter);~
+app.use('/users', usersRouter);
 app.use('/doctors', doctorsRouter);
+app.use('/availabilities', availabilitiesRouter)
 app.use('/appointments', appointmentsRouter);
 
 app.listen(PORT, () => {
