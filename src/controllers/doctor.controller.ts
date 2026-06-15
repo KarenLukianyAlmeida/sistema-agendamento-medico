@@ -10,24 +10,31 @@ export class DoctorController {
         try {
             const { licenseId, userId, specialityId } = req.body;
 
+            // Validação básica de campos
+            if (!licenseId || !userId || !specialityId) {
+                res.status(400).json({ error: "Todos os campos são obrigatórios." });
+                return; // <-- OBRIGATÓRIO: Garante que para aqui e não lê mais nada!
+            }
+
             const newDoctor = await doctorService.create(licenseId, userId, specialityId);
 
             res.status(201).json({
                 message: "Perfil de médico criado com sucesso.",
                 doctor: newDoctor
             });
+            return; // <-- OBRIGATÓRIO: Respondeu com sucesso, sai da função!
         } catch (error: any) {
-            if (
-                error.message === "Cédula profissional, ID do utilizador e ID da especialidade são obrigatórios." ||
-                error.message === "Esta cédula profissional já se encontra registada." ||
-                error.message === "O utilizador indicado não existe." ||
-                error.message === "Este utilizador já possui um perfil de médico associado." ||
-                error.message === "A especialidade indicada não existe."
+            console.error("Erro ao criar perfil de médico:", error);
+            
+            if (error.message === "Este utilizador já possui um perfil de médico associado." ||
+                error.message === "O utilizador indicado não existe ou não tem a role DOCTOR."
             ) {
                 res.status(400).json({ error: error.message });
+                return; // <-- OBRIGATÓRIO
             }
 
-            res.status(500).json({ error: "Erro inesperado ao criar o perfil de médico." });
+            res.status(500).json({ error: "Erro inesperado ao criar perfil de médico." });
+            return; // <-- OBRIGATÓRIO
         }
     }
 
@@ -48,6 +55,7 @@ export class DoctorController {
             
             const doctors = await doctorService.listBySpeciality(specialityId);
             res.status(200).json({ doctors });
+            return;
         } catch (error: any) {
             if (error.message === "A especialidade indicada não existe.") {
                 res.status(404).json({ error: error.message });

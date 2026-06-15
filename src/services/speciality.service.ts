@@ -58,17 +58,27 @@ export class SpecialityService {
 
     //Exclui especialidade médica
     async delete(id: string) {
-        const exists = await prisma.speciality.findUnique({
-            where: { id },
+        // 1. Verifica se a especialidade existe primeiro
+        const specialityExists = await prisma.speciality.findUnique({
+            where: { id }
         });
 
-        if (!exists) {
-            throw new Error("Especialidade não encontrada.");
+        if (!specialityExists) {
+            throw new Error("A especialidade indicada não existe no sistema."); // Erro de negócio (404)
         }
 
+        // 2. Verifica se existem médicos associados a esta especialidade
+        const linkedDoctors = await prisma.doctor.findFirst({
+            where: { specialityId: id }
+        });
+
+        if (linkedDoctors) {
+            throw new Error("Não é possível eliminar uma especialidade que possui médicos vinculados."); // Erro de negócio (400)
+        }
+
+        // 3. Se passou pelas validações, apaga com segurança
         return await prisma.speciality.delete({
-            where : { id },
+            where: { id }
         });
     }
-
 }

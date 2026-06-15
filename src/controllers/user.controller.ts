@@ -4,24 +4,26 @@ import { UserService } from "../services/user.service";
 const userService = new UserService();
 
 export class UserController {
-
-    // POST /users
-    async create(req: Request, res: Response): Promise<void> {
+    // POST /users (Privado - Apenas o Admin cria Médicos ou outros Admins)
+    async createByAdmin(req: Request, res: Response): Promise<void> {
         try {
             const { name, email, password, role } = req.body;
+            
+            // Aqui o Admin manda e o sistema obedece ao 'role' que ele escolheu no Body
             const newUser = await userService.create(name, email, password, role);
 
             res.status(201).json({
-                message: "Utilizador registado com sucesso.",
+                message: "Utilizador criado pelo administrador com sucesso.",
                 user: newUser
             });
         } catch (error: any) {
+            console.error("Erro na criação por admin:", error);
             if (error.message === "Este email já se encontra registado." ||
                 error.message === "Nome, email e palavra-passe são obrigatórios."
             ) {
                 res.status(400).json({ error: error.message });
+                return;
             }
-
             res.status(500).json({ error: "Erro inesperado ao criar o utilizador." });
         }
     }

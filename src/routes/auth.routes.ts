@@ -6,4 +6,7 @@ const authController = new AuthController();
 
 authRouter.post("/login", (req, res) => authController.login(req, res));
 
+// Nova Rota Pública: Registo Autónomo de Pacientes
+authRouter.post("/register", (req, res) => authController.register(req, res));
+
 export default authRouter;

@@ -85,14 +85,34 @@ export class UserService {
     }
 
     async delete(id: string) {
-        const userExists = await prisma.user.findUnique({
-            where: { id }
-        });
+        const userExists = await prisma.user.findUnique({ where: { id } });
 
         if (!userExists) {
             throw new Error("Utilizador não encontrado.");
         }
 
+        // 1. Se for DOCTOR, precisamos de limpar os slots de disponibilidade e o perfil de médico
+        if (userExists.role === "DOCTOR") {
+            const doctorProfile = await prisma.doctor.findUnique({ where: { userId: id } });
+            
+            if (doctorProfile) {
+                // Apaga as consultas associadas aos slots deste médico
+                await prisma.appointment.deleteMany({
+                    where: { slot: { doctorId: doctorProfile.id } }
+                });
+                // Apaga os slots de disponibilidade do médico
+                await prisma.availabilitySlot.deleteMany({ where: { doctorId: doctorProfile.id } });
+                // Apaga o perfil de médico
+                await prisma.doctor.delete({ where: { id: doctorProfile.id } });
+            }
+        }
+
+        // 2. Se for PATIENT, precisamos de apagar as consultas que ele agendou
+        if (userExists.role === "PATIENT") {
+            await prisma.appointment.deleteMany({ where: { patientId: id } });
+        }
+
+        // 3. Agora que a casa está limpa, podemos apagar o utilizador sem dar erro!
         return await prisma.user.delete({
             where: { id }
         });
