@@ -7,33 +7,19 @@ export class AvailabilityController {
 
     // POST /availabilities
     async create(req: Request, res: Response): Promise<void> {
-        try {
-            const { doctorId, dateTime } = req.body;
+    try {
+        const userLogado = (req as any).user; // Pegamos o utilizador real do Token
+        const { dateTime } = req.body;
 
-            const newSlot = await availabilityService.create(doctorId, dateTime);
-
-            res.status(201).json({
-                message: "Horário de disponibilidade criado com sucesso.",
-                slot: newSlot
-            });
-        } catch (error: any) {
-            console.error("Erro ao criar disponibilidade:", error);
-
-            if (
-                error.message === "ID do médico, horário de início e horário de fim são obrigatórios." ||
-                error.message === "O horário de início deve ser anterior ao horário de fim." ||
-                error.message === "Este médico já tem uma disponibilidade que se sobrepõe ao horário informado."
-            ) {
-                res.status(400).json({ error: error.message });
-            }
-
-            if (error.message === "O médico indicado não existe.") {
-                res.status(404).json({ error: error.message });
-            }
-
-            res.status(500).json({ error: "Erro inesperado ao criar disponibilidade." });
-        }
+        // Se for um DOCTOR, ele só pode criar disponibilidades para SI PRÓPRIO.
+        // Precisamos de passar o userLogado.id para o service conseguir validar ou buscar o Doctor correspondente.
+        const newSlot = await availabilityService.createWithAuth(userLogado.id, userLogado.role, req.body.doctorId, dateTime);
+        
+        res.status(201).json({ slot: newSlot });
+    } catch (error: any) {
+        res.status(400).json({ error: error.message });
     }
+}
 
     // GET /availabilities/free
     async listAllAvailable(req: Request, res: Response): Promise<void> {

@@ -113,6 +113,16 @@ export class AppointmentService {
         return updatedAppointment;
     }
 
+    // Procura uma consulta específica pelo ID (Auxiliar para validação de segurança)
+    async findById(id: string) {
+        return await prisma.appointment.findUnique({
+            where: { id },
+            include: {
+                slot: { select: { doctorId: true } }
+            }
+        });
+    }
+
     // Listar consultas de um Paciente específico
     async listByPatient(patientId: string) {
         return await prisma.appointment.findMany({

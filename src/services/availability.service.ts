@@ -40,6 +40,20 @@ export class AvailabilityService {
         });
     }
 
+    async createWithAuth(userIdLogado: string, roleLogada: string, doctorIdBody: string, dateTimeInput: string) {
+        // Se for médico, descobrimos o seu doctorId real na base de dados para ignorar fraudes do Body
+        if (roleLogada === "DOCTOR") {
+            const doctorProfile = await prisma.doctor.findUnique({ where: { userId: userIdLogado } });
+            if (!doctorProfile) throw new Error("Perfil de médico não encontrado para este utilizador.");
+            
+            // Substitui o ID pelo id real dele, garantindo que ele não mexe na agenda de terceiros
+            return await this.create(doctorProfile.id, dateTimeInput); 
+        }
+
+        // Se for ADMIN, ele pode criar para o doctorIdBody que enviou no Postman
+        return await this.create(doctorIdBody, dateTimeInput);
+    }
+
     // Listar disponibilidades livres (Onde isBooked é false)
     async listAllAvailable() {
         return await prisma.availabilitySlot.findMany({
