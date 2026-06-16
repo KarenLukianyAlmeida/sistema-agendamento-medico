@@ -35,7 +35,7 @@ src/
 * **Runtime:** Node.js
 * **Linguagem:** TypeScript
 * **Framework Web:** Express
-* **Base de Dados & ORM:** PostgreSQL / SQLite (via Prisma ORM)
+* **Base de Dados & ORM:** SQLite (via Prisma ORM)
 * **Segurança & Criptografia:** JWT (JsonWebToken) e Bcrypt
 * **Monitorização de Ficheiros:** Nodemon + ts-node
 
